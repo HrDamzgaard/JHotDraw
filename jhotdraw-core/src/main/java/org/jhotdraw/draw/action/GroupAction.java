@@ -35,6 +35,9 @@ public class GroupAction extends AbstractSelectedAction {
     /**
      * Creates a new instance.
      */
+
+    private static final String LABELS = "org.jhotdraw.draw.Labels";
+
     public GroupAction(DrawingEditor editor) {
         this(editor, new GroupFigure(), true);
     }
@@ -48,7 +51,7 @@ public class GroupAction extends AbstractSelectedAction {
         this.prototype = prototype;
         this.isGroupingAction = isGroupingAction;
         ResourceBundleUtil labels
-                = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
+                = ResourceBundleUtil.getBundle(LABELS);
         labels.configureAction(this, ID);
         updateEnabledState();
     }
@@ -87,7 +90,7 @@ public class GroupAction extends AbstractSelectedAction {
                     @Override
                     public String getPresentationName() {
                         ResourceBundleUtil labels
-                                = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
+                                = ResourceBundleUtil.getBundle(LABELS);
                         return labels.getString("edit.groupSelection.text");
                     }
 
@@ -103,10 +106,6 @@ public class GroupAction extends AbstractSelectedAction {
                         super.undo();
                     }
 
-                    @Override
-                    public boolean addEdit(UndoableEdit anEdit) {
-                        return super.addEdit(anEdit);
-                    }
                 };
                 groupFigures(view, group, ungroupedFigures);
                 fireUndoableEditHappened(edit);
@@ -122,7 +121,7 @@ public class GroupAction extends AbstractSelectedAction {
                     @Override
                     public String getPresentationName() {
                         ResourceBundleUtil labels
-                                = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
+                                = ResourceBundleUtil.getBundle(LABELS);
                         return labels.getString("edit.ungroupSelection.text");
                     }
 
