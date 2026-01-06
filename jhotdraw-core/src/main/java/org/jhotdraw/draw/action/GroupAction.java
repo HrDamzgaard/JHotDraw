@@ -145,6 +145,9 @@ public class GroupAction extends AbstractSelectedAction {
 
     public Collection<Figure> ungroupFigures(DrawingView view, CompositeFigure group) {
 // XXX - This code is redundant with UngroupAction
+        assert group != null : "Invariant brudt: Forsøg på afgruppering af null-objekt";
+        assert group.getChildCount() > 0 : "Invariant brudt: Forsøg på at afgruppere en tom gruppe";
+
         LinkedList<Figure> figures = new LinkedList<>(group.getChildren());
         view.clearSelection();
         group.basicRemoveAllChildren();
@@ -154,7 +157,10 @@ public class GroupAction extends AbstractSelectedAction {
         return figures;
     }
 
-    public void groupFigures(DrawingView view, CompositeFigure group, Collection<Figure> figures) {
+    public void groupFigures(DrawingView view, CompositeFigure group, Collection<Figure> figures)
+    {
+        assert figures != null && figures.size() > 1 : "Invarant brudt: Forsøg på gruppering af mindre end 2 figurer";
+
         Collection<Figure> sorted = view.getDrawing().sort(figures);
         int index = view.getDrawing().indexOf(sorted.iterator().next());
         view.getDrawing().basicRemoveAll(figures);
