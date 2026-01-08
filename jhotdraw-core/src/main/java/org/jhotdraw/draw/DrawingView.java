@@ -247,7 +247,7 @@ public interface DrawingView {
      *
      * @return A handle, null if no handle is found.
      */
-    public Handle findHandle(Point p);
+    public Handle findHandle(Point2D.Double p);
 
     /**
      * Gets compatible handles.
@@ -271,7 +271,7 @@ public interface DrawingView {
      *
      * @return A figure, null if no figure is found.
      */
-    public Figure findFigure(Point p);
+    public Figure findFigure(Point2D.Double p);
 
     /**
      * Returns all figures that lie within or intersect the specified
@@ -514,4 +514,6 @@ public interface DrawingView {
     public void addMouseWheelListener(MouseWheelListener l);
 
     public void removeMouseWheelListener(MouseWheelListener l);
+
+    Point2D.Double viewToDrawing(Point2D.Double viewPoint);
 }
