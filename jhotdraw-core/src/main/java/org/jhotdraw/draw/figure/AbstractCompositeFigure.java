@@ -37,7 +37,7 @@ import org.jhotdraw.xml.DOMStorable;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractCompositeFigure
+public class AbstractCompositeFigure
         extends AbstractFigure
         implements CompositeFigure, DOMStorable {
 
@@ -46,7 +46,7 @@ public abstract class AbstractCompositeFigure
      * A Layouter determines how the children of the CompositeFigure
      * are laid out graphically.
      */
-    protected Layouter layouter;
+    protected transient Layouter layouter;
     /**
      * The children that this figure is composed of
      *
@@ -297,7 +297,6 @@ public abstract class AbstractCompositeFigure
             f.transform(tx);
         }
         invalidate();
-        //invalidate();
     }
 
     @Override
@@ -315,7 +314,7 @@ public abstract class AbstractCompositeFigure
         if (!Double.isNaN(sx) && !Double.isNaN(sy)
                 && !Double.isInfinite(sx) && !Double.isInfinite(sy)
                 && (sx != 1d || sy != 1d)
-                && !(sx < 0.0001) && !(sy < 0.0001)) {
+                && (sx >= 0.0001) && (sy >= 0.0001)) {
             transform(tx);
             tx.setToIdentity();
             tx.scale(sx, sy);
@@ -331,7 +330,7 @@ public abstract class AbstractCompositeFigure
      * Z-order front to back over the children.
      */
     public java.util.List<Figure> getChildrenFrontToBack() {
-        return children.size() == 0 ? new LinkedList<>() : new ReversedList<>(getChildren());
+        return children.isEmpty() ? new LinkedList<>() : new ReversedList<>(getChildren());
     }
 
     @Override
@@ -414,7 +413,6 @@ public abstract class AbstractCompositeFigure
 
     public Figure findChild(Point2D.Double p) {
         if (getBounds().contains(p)) {
-            Figure found = null;
             for (Figure child : getChildrenFrontToBack()) {
                 if (child.isVisible() && child.contains(p)) {
                     return child;

@@ -145,8 +145,12 @@ public class GroupAction extends AbstractSelectedAction {
 
     public Collection<Figure> ungroupFigures(DrawingView view, CompositeFigure group) {
 // XXX - This code is redundant with UngroupAction
-        assert group != null : "Invariant brudt: Forsøg på afgruppering af null-objekt";
-        assert group.getChildCount() > 0 : "Invariant brudt: Forsøg på at afgruppere en tom gruppe";
+        if (group == null) {
+            throw new IllegalArgumentException("\n" + "Invariant broken: Attempt to ungroup null object");
+        }
+        if (group.getChildCount() <= 0) {
+            throw new IllegalStateException("Invariant broken: Attempt to ungroup an empty group");
+        }
 
         LinkedList<Figure> figures = new LinkedList<>(group.getChildren());
         view.clearSelection();
@@ -159,7 +163,10 @@ public class GroupAction extends AbstractSelectedAction {
 
     public void groupFigures(DrawingView view, CompositeFigure group, Collection<Figure> figures)
     {
-        assert figures != null && figures.size() > 1 : "Invarant brudt: Forsøg på gruppering af mindre end 2 figurer";
+        if (figures == null || figures.size() < 2) {
+            throw new IllegalArgumentException("\n" +
+                    "Invariant broken: Attempts at grouping less than 2 shapes");
+        }
 
         Collection<Figure> sorted = view.getDrawing().sort(figures);
         int index = view.getDrawing().indexOf(sorted.iterator().next());
