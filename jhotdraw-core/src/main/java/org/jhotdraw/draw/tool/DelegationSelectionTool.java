@@ -179,7 +179,7 @@ public class DelegationSelectionTool extends SelectionTool {
      */
     protected void handlePopupMenu(MouseEvent evt) {
         Point p = new Point(evt.getX(), evt.getY());
-        Figure figure = getView().findFigure(p);
+        Figure figure = getView().findFigure(new Point2D.Double(anchor.x, anchor.y));
         if (figure != null || drawingActions.size() > 0) {
             showPopupMenu(figure, p, evt.getComponent());
         } else {
@@ -267,7 +267,7 @@ public class DelegationSelectionTool extends SelectionTool {
         }
         DrawingView v = getView();
         Point pos = new Point(evt.getX(), evt.getY());
-        Handle handle = v.findHandle(pos);
+        Handle handle = v.findHandle(new Point2D.Double(anchor.x, anchor.y));
         if (handle != null) {
             if (DEBUG) {
                 System.out.println("DelegationSelectionTool.handleDoubleClick by handle");
@@ -291,7 +291,7 @@ public class DelegationSelectionTool extends SelectionTool {
             // If the point is not contained in the current selection,
             // search for a figure in the drawing.
             if (figure == null) {
-                figure = v.findFigure(pos);
+                figure = v.findFigure(new Point2D.Double(anchor.x, anchor.y));
             }
             Figure outerFigure = figure;
             if (figure != null && figure.isSelectable()) {
@@ -333,7 +333,7 @@ public class DelegationSelectionTool extends SelectionTool {
         }
         DrawingView v = getView();
         Point pos = new Point(evt.getX(), evt.getY());
-        Handle handle = v.findHandle(pos);
+        Handle handle = v.findHandle(new Point2D.Double(anchor.x, anchor.y));
         if (handle == null) {
             v.setHandleDetailLevel(v.getHandleDetailLevel() + 1);
         }
@@ -341,11 +341,11 @@ public class DelegationSelectionTool extends SelectionTool {
 
     @Override
     public String getToolTipText(DrawingView view, MouseEvent evt) {
-        Handle handle = view.findHandle(evt.getPoint());
+        Handle handle = view.findHandle(new Point2D.Double(anchor.x, anchor.y));
         if (handle != null) {
             return handle.getToolTipText(evt.getPoint());
         }
-        Figure figure = view.findFigure(evt.getPoint());
+        Figure figure = view.findFigure(new Point2D.Double(anchor.x, anchor.y));
         if (figure != null) {
             return figure.getToolTipText(viewToDrawing(evt.getPoint()));
         }

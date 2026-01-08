@@ -1,0 +1,30 @@
+name: Java CI with Maven
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'  # OpenJDK
+          java-version: '17'       # or the version your project uses
+          cache: maven
+
+      - name: Configure Maven settings
+        run: mvn help:effective-settings
+        # Optional: you will add .maven-settings.xml to root later
+
+      - name: Build with Maven
+        run: mvn clean install --settings .maven-settings.xml
+
