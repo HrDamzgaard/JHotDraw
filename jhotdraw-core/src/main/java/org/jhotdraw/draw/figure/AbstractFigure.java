@@ -623,4 +623,10 @@ public abstract class AbstractFigure
         connectors.add(new ChopRectangleConnector(this));
         return connectors;
     }
+
+    @Override
+    public Point2D.Double chop(Point2D.Double from) {
+        Rectangle2D.Double r = getBounds();
+        return org.jhotdraw.geom.Geom.angleToPoint(r, org.jhotdraw.geom.Geom.pointToAngle(r, from));
+    }
 }

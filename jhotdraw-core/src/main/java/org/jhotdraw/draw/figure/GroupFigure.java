@@ -28,16 +28,39 @@ public class GroupFigure extends AbstractCompositeFigure {
     }
 
     /**
-     * This is a default implementation that chops the point at the rectangle
-     * returned by getBounds() of the figure.
-     * <p>
-     * Figures which have a non-rectangular shape need to override this method.
-     * <p>
-     * FIXME Invoke chop on each child and return the closest point.
+     * Returns the closest chop point by checking each child figure.
+     * This replaces the default implementation that only checked the group's bounding box.
      */
-    public Point2D.Double chop(Point2D.Double from) {
-        Rectangle2D.Double r = getBounds();
-        return Geom.angleToPoint(r, Geom.pointToAngle(r, from));
+
+    @Override
+    public Point2D.Double chop(Point2D.Double from)
+    {
+        Point2D.Double closestPoint = null;
+        double minDistance = Double.MAX_VALUE;
+
+        for (Figure f : children)
+        {
+            Rectangle2D.Double r = f.getBounds();
+
+            Point2D.Double childChop = Geom.angleToPoint(r, Geom.pointToAngle(r, from));
+
+            if (childChop != null)
+            {
+                double distance = from.distanceSq(childChop);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    closestPoint = childChop;
+                }
+            }
+        }
+
+        if (closestPoint == null)
+        {
+            Rectangle2D.Double r = getBounds();
+            closestPoint = Geom.angleToPoint(r, Geom.pointToAngle(r, from));
+        }
+
+        return closestPoint;
     }
 
     /**

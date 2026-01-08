@@ -16,6 +16,7 @@ import java.util.*;
 import javax.swing.*;
 import org.jhotdraw.draw.AttributeKey;
 import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.event.FigureListener;
@@ -324,7 +325,7 @@ public interface Figure extends Cloneable, Serializable {
      * Returns a view to all attributes of this figure.
      * By convention, an unmodifiable map is returned.
      */
-    public Map<AttributeKey<?>, Object> getAttributes();
+    Map<AttributeKey<?>, Object> getAttributes();
 
     /**
      * Gets data which can be used to restore the attributes of the figure
@@ -600,4 +601,6 @@ public interface Figure extends Cloneable, Serializable {
      * @param listener
      */
     public void removePropertyChangeListener(PropertyChangeListener listener);
+
+    public Point2D.Double chop(Point2D.Double from);
 }
