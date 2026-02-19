@@ -63,5 +63,15 @@ public class TextAreaEditingToolTest {
         verify(textArea).endOverlay();
     }
 
+    @Test
+    public void testBeginEdit() throws IllegalAccessException {
+        textUndoableEdit = new TextUndoableEdit();
+        FieldUtils.writeField(textAreaEditingTool, "editor", drawingEditor, true);
+        FieldUtils.writeField(textAreaEditingTool, "textArea", textArea, true);
+        FieldUtils.writeField(textAreaEditingTool, "textUndoableEdit", textUndoableEdit, true);
+        textAreaEditingTool.beginEdit(typingTarget);
+        Object valueOfField
+    }
+
 
 }
