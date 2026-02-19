@@ -3,6 +3,7 @@ package org.jhotdraw.draw.tool;
 import com.tngtech.jgiven.Stage;
 import com.tngtech.jgiven.annotation.ScenarioState;
 import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.draw.figure.TextHolderFigure;
@@ -12,6 +13,8 @@ public class ThenResultTextArea extends Stage<ThenResultTextArea> {
 
     @ScenarioState
     Drawing drawing;
+    @ScenarioState
+    DrawingEditor drawingEditor;
     @ScenarioState
     DrawingView drawingView;
     @ScenarioState

@@ -3,6 +3,7 @@ package org.jhotdraw.draw.tool;
 import com.tngtech.jgiven.Stage;
 import com.tngtech.jgiven.annotation.ScenarioState;
 import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.text.FloatingTextArea;
 import org.mockito.Mockito;
@@ -19,6 +20,8 @@ public class WhenActionTextArea extends Stage<WhenActionTextArea> {
 
     @ScenarioState
     Drawing drawing;
+    @ScenarioState
+    DrawingEditor drawingEditor;
     @ScenarioState
     DrawingView drawingView;
     @ScenarioState
