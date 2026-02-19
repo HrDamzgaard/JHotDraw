@@ -13,6 +13,7 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 
 import javax.swing.undo.UndoableEdit;
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
@@ -23,9 +24,9 @@ public class TextAreaEditingToolTest {
     private DrawingEditor drawingEditor;
     private TextAreaEditingTool textAreaEditingTool;
     private TextUndoableEdit textUndoableEdit;
-    private AbstractTool abstractTool;
     private Drawing drawing;
     private DrawingView drawingView;
+    private TextAreaFieldBounds textAreaFieldBounds;
 
     @Before
     public void setUp() {
@@ -35,7 +36,8 @@ public class TextAreaEditingToolTest {
         drawing = mock(Drawing.class);
         drawingView = mock(DrawingView.class);
         textUndoableEdit = mock(TextUndoableEdit.class);
-        abstractTool = mock(AbstractTool.class);
+        textAreaFieldBounds = mock(TextAreaFieldBounds.class);
+
         textAreaEditingTool = new TextAreaEditingTool(typingTarget);
 
         UndoableEdit undoableEdit = mock(UndoableEdit.class);
@@ -46,17 +48,23 @@ public class TextAreaEditingToolTest {
         when(drawingEditor.getActiveView()).thenReturn(drawingView);
         when(drawingView.getDrawing()).thenReturn((drawing));
         when(drawingView.getComponent()).thenReturn(new javax.swing.JPanel());
+        when(textAreaFieldBounds.getRectangleFieldBounds(typingTarget)).thenReturn(new Rectangle2D.Double());
         doNothing().when(textArea).endOverlay();
     }
 
     @Test
     public void testEndEdit() throws IllegalAccessException {
         textUndoableEdit = new TextUndoableEdit();
+
         FieldUtils.writeField(textAreaEditingTool, "editor", drawingEditor, true);
         FieldUtils.writeField(textAreaEditingTool, "textArea", textArea, true);
         FieldUtils.writeField(textAreaEditingTool, "textUndoableEdit", textUndoableEdit, true);
+        FieldUtils.writeField(textAreaEditingTool, "typingTarget", typingTarget, true);
+
         textAreaEditingTool.endEdit();
+
         Object valueOfField = FieldUtils.readField(textAreaEditingTool, "typingTarget", true);
+
         assertNull(valueOfField);
         verify(typingTarget).setText("changed text");
         verify(drawing).fireUndoableEditHappened(any());
@@ -66,12 +74,21 @@ public class TextAreaEditingToolTest {
     @Test
     public void testBeginEdit() throws IllegalAccessException {
         textUndoableEdit = new TextUndoableEdit();
+
         FieldUtils.writeField(textAreaEditingTool, "editor", drawingEditor, true);
         FieldUtils.writeField(textAreaEditingTool, "textArea", textArea, true);
         FieldUtils.writeField(textAreaEditingTool, "textUndoableEdit", textUndoableEdit, true);
-        textAreaEditingTool.beginEdit(typingTarget);
-        Object valueOfField
-    }
+        FieldUtils.writeField(textAreaEditingTool, "textAreaFieldBounds", textAreaFieldBounds, true);
+        FieldUtils.writeField(textAreaEditingTool, "typingTarget", null, true);
 
+        textAreaEditingTool.beginEdit(typingTarget);
+
+        Object valueOfField = FieldUtils.readField(textAreaEditingTool, "typingTarget", true);
+
+        assertEquals(typingTarget, valueOfField);
+        verify(textArea).createOverlay(drawingView, typingTarget);
+        verify(textArea).setBounds(any(), eq("original text"));
+        verify(textArea).requestFocus();
+    }
 
 }
