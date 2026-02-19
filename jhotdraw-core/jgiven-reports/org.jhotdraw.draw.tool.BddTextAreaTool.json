@@ -1,0 +1,122 @@
+{
+  "className": "org.jhotdraw.draw.tool.BddTextAreaTool",
+  "name": "Bdd Text Area Tool",
+  "scenarios": [
+    {
+      "className": "org.jhotdraw.draw.tool.BddTextAreaTool",
+      "testMethodName": "user_create_text_area",
+      "description": "user create text area",
+      "tagIds": [],
+      "explicitParameters": [],
+      "derivedParameters": [],
+      "scenarioCases": [
+        {
+          "caseNr": 1,
+          "steps": [
+            {
+              "name": "empty drawing",
+              "words": [
+                {
+                  "value": "Given",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "empty drawing"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 156773500,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "the text creation tool active",
+              "words": [
+                {
+                  "value": "and",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "the text creation tool active"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 3498200,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "user creates text area",
+              "words": [
+                {
+                  "value": "When",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "user creates text area"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 2796400,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "user writes",
+              "words": [
+                {
+                  "value": "and",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "user writes"
+                },
+                {
+                  "value": "Test",
+                  "argumentInfo": {
+                    "argumentName": "text",
+                    "formattedValue": "Test"
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 84792200,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "text area created with text",
+              "words": [
+                {
+                  "value": "Then",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "text area created with text"
+                },
+                {
+                  "value": "Test",
+                  "argumentInfo": {
+                    "argumentName": "expectedText",
+                    "formattedValue": "Test"
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 431500,
+              "depth": 0,
+              "parentFailed": false
+            }
+          ],
+          "explicitArguments": [],
+          "derivedArguments": [],
+          "status": "SUCCESS",
+          "durationInNanos": 264775000
+        }
+      ],
+      "casesAsTable": false,
+      "durationInNanos": 264775000
+    }
+  ],
+  "tagMap": {}
+}
