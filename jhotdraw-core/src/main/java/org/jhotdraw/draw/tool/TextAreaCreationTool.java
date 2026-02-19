@@ -78,8 +78,10 @@ import org.jhotdraw.util.ResourceBundleUtil;
 public class TextAreaCreationTool extends CreationTool implements ActionListener {
 
     private static final long serialVersionUID = 1L;
-    private FloatingTextArea textArea;
+    private transient FloatingTextArea textArea;
     private TextHolderFigure typingTarget;
+    private TextUndoableEdit textUndoableEdit;
+    private TextAreaFieldBounds textAreaFieldBounds;
     /**
      * Rubberband color of the tool. When this is null, the tool does not
      * draw a rubberband.
@@ -144,10 +146,6 @@ public class TextAreaCreationTool extends CreationTool implements ActionListener
         beginEdit((TextHolderFigure) createdFigure);
     }
 
-    /*
-    public void mouseDragged(java.awt.event.MouseEvent e) {
-    }
-     */
     @Override
     public void draw(Graphics2D g) {
         if (createdFigure != null && rubberbandColor != null) {
@@ -159,7 +157,6 @@ public class TextAreaCreationTool extends CreationTool implements ActionListener
     protected void beginEdit(TextHolderFigure textHolder) {
         if (textArea == null) {
             textArea = new FloatingTextArea();
-            //textArea.addActionListener(this);
         }
         if (textHolder != typingTarget && typingTarget != null) {
             endEdit();
@@ -171,17 +168,7 @@ public class TextAreaCreationTool extends CreationTool implements ActionListener
     }
 
     private Rectangle2D.Double getFieldBounds(TextHolderFigure figure) {
-        Rectangle2D.Double r = figure.getDrawingArea();
-        Insets2D.Double insets = figure.getInsets();
-        insets.subtractTo(r);
-        // FIXME - Find a way to determine the parameters for grow.
-        //r.grow(1,2);
-        //r.width += 16;
-        r.x -= 1;
-        r.y -= 2;
-        r.width += 18;
-        r.height += 4;
-        return r;
+        return textAreaFieldBounds.getRectangleFieldBounds(figure);
     }
 
     protected void endEdit() {
@@ -190,7 +177,7 @@ public class TextAreaCreationTool extends CreationTool implements ActionListener
             final TextHolderFigure editedFigure = typingTarget;
             final String oldText = typingTarget.getText();
             final String newText = textArea.getText();
-            if (newText.length() > 0) {
+            if (!newText.isEmpty()) {
                 typingTarget.setText(newText);
             } else {
                 if (createdFigure != null) {
@@ -200,37 +187,12 @@ public class TextAreaCreationTool extends CreationTool implements ActionListener
                     typingTarget.setText("");
                 }
             }
-            UndoableEdit edit = new AbstractUndoableEdit() {
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public String getPresentationName() {
-                    ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
-                    return labels.getString("attribute.text.text");
-                }
-
-                @Override
-                public void undo() {
-                    super.undo();
-                    editedFigure.willChange();
-                    editedFigure.setText(oldText);
-                    editedFigure.changed();
-                }
-
-                @Override
-                public void redo() {
-                    super.redo();
-                    editedFigure.willChange();
-                    editedFigure.setText(newText);
-                    editedFigure.changed();
-                }
-            };
+            UndoableEdit edit = textUndoableEdit.makeUndoableEdit(editedFigure, oldText, newText);
             getDrawing().fireUndoableEditHappened(edit);
             typingTarget.changed();
             typingTarget = null;
             textArea.endOverlay();
         }
-        //         view().checkDamage();
     }
 
     @Override

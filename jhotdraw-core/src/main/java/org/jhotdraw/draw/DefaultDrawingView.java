@@ -137,6 +137,11 @@ public class DefaultDrawingView
         }
     }
 
+    @Override
+    public Point2D.Double viewToDrawing(Point2D.Double viewPoint) {
+        return null;
+    }
+
     /**
      * Draws the background of the drawing view.
      */
@@ -894,6 +899,11 @@ public class DefaultDrawingView
         return selectedFigures.size();
     }
 
+    @Override
+    public Handle findHandle(Point2D.Double p) {
+        return null;
+    }
+
     /**
      * Gets the currently active selection handles.
      */
@@ -1507,5 +1517,10 @@ public class DefaultDrawingView
     @Override
     public Handle getActiveHandle() {
         return activeHandle;
+    }
+
+    @Override
+    public Figure findFigure(Point2D.Double p) {
+        return null;
     }
 }

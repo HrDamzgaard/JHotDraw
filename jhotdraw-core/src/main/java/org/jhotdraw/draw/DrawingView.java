@@ -249,6 +249,9 @@ public interface DrawingView {
      */
     public Handle findHandle(Point2D.Double p);
 
+    Handle findHandle(
+            Point p);
+
     /**
      * Gets compatible handles.
      *
@@ -272,6 +275,8 @@ public interface DrawingView {
      * @return A figure, null if no figure is found.
      */
     public Figure findFigure(Point2D.Double p);
+
+    Figure findFigure(Point p);
 
     /**
      * Returns all figures that lie within or intersect the specified

@@ -56,8 +56,10 @@ import org.jhotdraw.util.ResourceBundleUtil;
 public class TextAreaEditingTool extends AbstractTool implements ActionListener {
 
     private static final long serialVersionUID = 1L;
-    private FloatingTextArea textArea;
+    private transient FloatingTextArea textArea;
     private TextHolderFigure typingTarget;
+    private TextUndoableEdit textUndoableEdit;
+    private TextAreaFieldBounds textAreaFieldBounds;
 
     /**
      * Creates a new instance.
@@ -85,13 +87,13 @@ public class TextAreaEditingTool extends AbstractTool implements ActionListener 
     }
 
     @Override
-    public void draw(Graphics2D g) {
+    public void draw(Graphics2D g) throws UnsupportedOperationException{
+        // This method is empty because this class only edits text areas and does not create them.
     }
 
     protected void beginEdit(TextHolderFigure textHolder) {
         if (textArea == null) {
             textArea = new FloatingTextArea();
-            //textArea.addActionListener(this);
         }
         if (textHolder != typingTarget && typingTarget != null) {
             endEdit();
@@ -103,17 +105,7 @@ public class TextAreaEditingTool extends AbstractTool implements ActionListener 
     }
 
     private Rectangle2D.Double getFieldBounds(TextHolderFigure figure) {
-        Rectangle2D.Double r = figure.getDrawingArea();
-        Insets2D.Double insets = figure.getInsets();
-        insets.subtractTo(r);
-        // FIXME - Find a way to determine the parameters for grow.
-        //r.grow(1,2);
-        //r.width += 16;
-        r.x -= 1;
-        r.y -= 2;
-        r.width += 18;
-        r.height += 4;
-        return r;
+        return textAreaFieldBounds.getRectangleFieldBounds(figure);
     }
 
     protected void endEdit() {
@@ -123,43 +115,18 @@ public class TextAreaEditingTool extends AbstractTool implements ActionListener 
             final String oldText = typingTarget.getText();
             final String newText = textArea.getText();
             typingTarget.willChange();
-            if (newText.length() > 0) {
+            if (!newText.isEmpty()) {
                 typingTarget.setText(newText);
             } else {
                 typingTarget.setText("");
             }
             typingTarget.changed();
-            UndoableEdit edit = new AbstractUndoableEdit() {
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public String getPresentationName() {
-                    ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
-                    return labels.getString("attribute.text.text");
-                }
-
-                @Override
-                public void undo() {
-                    super.undo();
-                    editedFigure.willChange();
-                    editedFigure.setText(oldText);
-                    editedFigure.changed();
-                }
-
-                @Override
-                public void redo() {
-                    super.redo();
-                    editedFigure.willChange();
-                    editedFigure.setText(newText);
-                    editedFigure.changed();
-                }
-            };
+            UndoableEdit edit = textUndoableEdit.makeUndoableEdit(editedFigure, oldText, newText);
             getDrawing().fireUndoableEditHappened(edit);
             typingTarget.changed();
             typingTarget = null;
             textArea.endOverlay();
         }
-        //         view().checkDamage();
     }
 
     @Override
