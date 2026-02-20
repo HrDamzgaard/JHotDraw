@@ -19,7 +19,7 @@ public class TextAreaCreationToolTest {
     private TextHolderFigure typingTarget;
     private FloatingTextArea textArea;
     private DrawingEditor drawingEditor;
-    private TextAreaEditingTool textAreaEditingTool;
+    private TextAreaCreationTool textAreaCreationTool;
     private TextUndoableEdit textUndoableEdit;
     private Drawing drawing;
     private DrawingView drawingView;
@@ -35,7 +35,7 @@ public class TextAreaCreationToolTest {
         textUndoableEdit = mock(TextUndoableEdit.class);
         textAreaFieldBounds = mock(TextAreaFieldBounds.class);
 
-        textAreaEditingTool = new TextAreaEditingTool(typingTarget);
+        textAreaCreationTool = new TextAreaCreationTool(typingTarget);
 
         UndoableEdit undoableEdit = mock(UndoableEdit.class);
 
@@ -53,14 +53,14 @@ public class TextAreaCreationToolTest {
     public void testEndEdit() throws IllegalAccessException {
         textUndoableEdit = new TextUndoableEdit();
 
-        FieldUtils.writeField(textAreaEditingTool, "editor", drawingEditor, true);
-        FieldUtils.writeField(textAreaEditingTool, "textArea", textArea, true);
-        FieldUtils.writeField(textAreaEditingTool, "textUndoableEdit", textUndoableEdit, true);
-        FieldUtils.writeField(textAreaEditingTool, "typingTarget", typingTarget, true);
+        FieldUtils.writeField(textAreaCreationTool, "editor", drawingEditor, true);
+        FieldUtils.writeField(textAreaCreationTool, "textArea", textArea, true);
+        FieldUtils.writeField(textAreaCreationTool, "textUndoableEdit", textUndoableEdit, true);
+        FieldUtils.writeField(textAreaCreationTool, "typingTarget", typingTarget, true);
 
-        textAreaEditingTool.endEdit();
+        textAreaCreationTool.endEdit();
 
-        Object valueOfField = FieldUtils.readField(textAreaEditingTool, "typingTarget", true);
+        Object valueOfField = FieldUtils.readField(textAreaCreationTool, "typingTarget", true);
 
         assertNull(valueOfField);
         verify(typingTarget).setText("changed text");
@@ -72,15 +72,15 @@ public class TextAreaCreationToolTest {
     public void testBeginEdit() throws IllegalAccessException {
         textUndoableEdit = new TextUndoableEdit();
 
-        FieldUtils.writeField(textAreaEditingTool, "editor", drawingEditor, true);
-        FieldUtils.writeField(textAreaEditingTool, "textArea", textArea, true);
-        FieldUtils.writeField(textAreaEditingTool, "textUndoableEdit", textUndoableEdit, true);
-        FieldUtils.writeField(textAreaEditingTool, "textAreaFieldBounds", textAreaFieldBounds, true);
-        FieldUtils.writeField(textAreaEditingTool, "typingTarget", null, true);
+        FieldUtils.writeField(textAreaCreationTool, "editor", drawingEditor, true);
+        FieldUtils.writeField(textAreaCreationTool, "textArea", textArea, true);
+        FieldUtils.writeField(textAreaCreationTool, "textUndoableEdit", textUndoableEdit, true);
+        FieldUtils.writeField(textAreaCreationTool, "textAreaFieldBounds", textAreaFieldBounds, true);
+        FieldUtils.writeField(textAreaCreationTool, "typingTarget", null, true);
 
-        textAreaEditingTool.beginEdit(typingTarget);
+        textAreaCreationTool.beginEdit(typingTarget);
 
-        Object valueOfField = FieldUtils.readField(textAreaEditingTool, "typingTarget", true);
+        Object valueOfField = FieldUtils.readField(textAreaCreationTool, "typingTarget", true);
 
         assertEquals(typingTarget, valueOfField);
         verify(textArea).createOverlay(drawingView, typingTarget);
